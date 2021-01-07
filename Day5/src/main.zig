@@ -93,14 +93,18 @@ fn part2() !void {
 
     std.sort.sort(u16, &buffer, {}, comptime std.sort.asc(u16));
 
-    var prev = buffer[0];
-    const my_seat = for (buffer[1..]) |e| {
-        if (e - prev == 2) {
-            break e - 1;
-        }
-        prev = e;
-    } else {
-        unreachable;
+    const my_seat = blk: {
+        var prev = buffer[0];
+        break :blk for (buffer[1..]) |e| {
+            if (e - prev == 2) {
+                break e - 1;
+            }
+            prev = e;
+        } else {
+            unreachable;
+        };
+
+        // break :blk result;
     };
 
     print("My seat number: {}\n", .{my_seat});
